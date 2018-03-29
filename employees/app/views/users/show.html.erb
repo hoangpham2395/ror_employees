@@ -1,0 +1,113 @@
+<div class="container">
+	<div class="row">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+			<li class="breadcrumb-item"><a href="#"><i class="fa fa-user"></i> Employees manage</a></li>
+			<li class="breadcrumb-item active"><span style="color: red;"><%= @user.fullname %></span></li>
+		</ol>
+		<div class="panel panel-info">
+			<div class="panel-heading">Thông tin người dùng</div>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-4 text-center">
+						<%= image_tag("admin.jpg", :class => "img-thumbnail", size: "200x200", alt: "Avatar") %>
+					</div>
+					<div class="col-md-8">
+						<%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_user_path(@user), :class => "btn btn-sm btn-primary", 'data-toggle' => 'tooltip', :title => "Edit" %>
+						<%= link_to '<i class="fa fa-trash"></i>'.html_safe, user_path(@user), :class => "btn btn-sm btn-danger", method: :delete, :data => {:confirm => "Bạn chắc chắn?"}, 'data-toggle' => 'tooltip', :title => "Delete" %>
+						
+						<table class="table table-bordered table-hover" style="margin-top: 10px;">
+							<thead style="background: #53585a; color: #fff;">
+								<th width="30%"></th>
+								<th width="70%" class="text-center">Thông tin</th>
+							</thead>
+							<tbody>
+								<tr>
+									<td>Tài khoản</td>
+									<td><b><%= @user.username %></b></td>
+								</tr>
+								<tr>
+									<td>Tên đầy đủ</td>
+									<td><b><%= @user.fullname %></b></td>
+								</tr>
+								<tr>
+									<td>Email công ty</td>
+									<td><b><%= @user.email_company %></b></td>
+								</tr>
+								<tr>
+									<td>Email cá nhân</td>
+									<td><b><%= @user.email_personal %></b></td>
+								</tr>
+								<tr>
+									<td>Số điện thoại</td>
+									<td><b><%= @user.tel %></b></td>
+								</tr>
+								<tr>
+									<td>Giới tính</td>
+									<td><b><%= @user.gender == 1 ? "Nam" : "Nữ" %></b></td>
+								</tr>
+								<tr>
+									<td>Ngày sinh</td>
+									<td><b><%= @user.birthday %></b></td>
+								</tr>
+								<tr>
+									<td>Phòng</td>
+									<td><b><%= @user.department %></b></td>
+								</tr>
+								<tr>
+									<td>Vị trí</td>
+									<td><b><%= @user.position %></b></td>
+								</tr>
+								<tr>
+									<td>Kiểu nhân viên</td>
+									<td><b><%= @user.user_type %></b></td>
+								</tr>
+								<tr>
+									<td>Kỹ năng</td>
+									<td><b><%= @user.skill %></b></td>
+								</tr>
+								<tr>
+									<td>Trình độ học vấn</td>
+									<td><b><%= @user.literacy %></b></td>
+								</tr>
+								<tr>
+									<td>Loại hợp đồng</td>
+									<td><b><%= @user.contract_type %></b></td>
+								</tr>
+								<tr>
+									<td>Trạng thái làm việc</td>
+									<td><b><%= @user.status %></b></td>
+								</tr>
+								<tr>
+									<td>Địa chỉ</td>
+									<td><b><%= @user.address %></b></td>
+								</tr>
+								<tr>
+									<td>Tài khoản ngân hàng</td>
+									<td><b><%= @user.bank_account %></b></td>
+								</tr>
+								<tr>
+									<td>Số chứng minh thư</td>
+									<td><b><%= @user.id_number %></b></td>
+								</tr>
+								<tr>
+									<td>Ngày bắt đầu làm việc</td>
+									<td><b><%= @user.join_datetime %></b></td>
+								</tr>
+								<tr>
+									<td>Ngày kết thúc làm việc</td>
+									<td><b><%= @user.exit_datetime %></b></td>
+								</tr>
+								<tr>
+									<td>Mô tả</td>
+									<td><b><%= @user.description %></b></td>
+								</tr>
+								
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
