@@ -1,0 +1,63 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-user"></i> Leave days manage</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">Information project</span></li>
+</ol>
+
+<div class="panel panel-info">
+	<div class="panel-heading">Information</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-12">
+				<%= link_to '<i class="fa fa-suitcase"></i>'.html_safe, projects_path, :class => "btn btn-primary", :title => "List of projects" %>
+				<%= link_to '<i class="fa fa-users"></i>'.html_safe, members_path, :class => "btn btn-danger", :title => "List of members" %>
+				<div class="table-responsive">			
+					<table class="table table-bordered table-hover" style="margin-top: 15px;">
+						<thead style="background: #53585a; color: #fff;">
+							<th width="20%"></th>
+							<th width="80%" class="text-center">Information</th>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Project name</td>
+								<td><b><%= @project.project_name %></b></td>
+							</tr>
+							<tr>
+								<td>Leader</td>
+								<td><b>
+									<% @leader.each do |l| %>
+										<%= l.fullname %>
+									<% end %>
+								</b></td>
+							</tr>
+							<tr>
+								<td>Members</td>
+								<td><b>
+									<% @members.each do |m| %>
+											&#9679; <%= m.fullname %> <br>
+									<% end %>	
+								</b></td>
+							</tr>
+							<tr>
+								<td>Project status</td>
+								<td><b><%= @project.project_status %></b></td>
+							</tr>
+							<tr>
+								<td>Language</td>
+								<td><b><%= @project.project_lang %></b></td>
+							</tr>
+							<tr>
+								<td>Start datetime</td>
+								<td><b><%= @project.start_datetime %></b></td>
+							</tr>
+							<tr>
+								<td>End datetime</td>
+								<td><b><%= @project.end_datetime %></b></td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

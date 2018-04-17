@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employee: one
+  project: one
+  ot_datetime: 2018-04-12
+  ot_hour: 1.5
+  ot_reason: MyString
+  del_flag: 1
+
+two:
+  employee: two
+  project: two
+  ot_datetime: 2018-04-12
+  ot_hour: 1.5
+  ot_reason: MyString
+  del_flag: 1

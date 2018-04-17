@@ -1,0 +1,81 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-suitcase"></i> Projects manage</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">List of projects</span></li>
+</ol>
+
+<!-- Display notification -->
+<% flash.each do |type, message| %>
+	<%= content_tag :div, class: "alert alert-#{type} alert-dismissible", role: "alert" do %>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<%= message %>
+	<% end %>
+<% end %> 
+
+<div class="panel panel-info">
+	<div class="panel-heading">Search project</div>
+	<div class="panel-body">
+		<%= form_tag(projects_path, method: :get) do %>
+			<div class="row">
+				<div class="form-group col-md-12">
+					<%= label_tag :project_name, "Tên dự án:" %>
+					<%= text_field_tag :project_name, params[:project_name], class: "form-control", placeholder: "Project name" %>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 15px;">
+				<div class="form-group text-center">
+					<%= submit_tag("Reset", {:type => "reset", :name => "reset", :id => "reset_project", :class => "btn btn-primary"}) %>
+					<%= submit_tag "Search", class: "btn btn-danger" %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading">List of projects</div>
+	<div class="panel-body">
+		<%= link_to '<i class="fa fa-refresh"></i> Reload'.html_safe, projects_path, :class => "btn btn-default" %>
+		<div class="table-responsive">			
+			<table class="table table-bordered table-hover" style="margin-top: 15px; font-size: 11px;">
+				<thead style="background: #53585a; color: #fff;">
+					<th class="text-center">No.</th>
+					<th>Project name</th>
+					<!-- <th>Leader</th> -->
+					<th>Project status</th>
+					<th>Language</th>
+					<th>Start datetime</th>
+					<th>End datetime</th>
+					<th>Detail</th>
+					<th class="text-center">Edit</th>
+					<th class="text-center">Delete</th>
+				</thead>
+				<tbody>
+					<% if @projects.empty? %>
+						<tr><td colspan="9" class="text-center"><span style="color: red;"><i class="fa fa-exclamation-triangle"></i> Not data</span></td></tr>
+					<% else %>
+						<% i = 1 %>
+						<% @projects.each do |project| %>
+							<tr>
+								<td class="text-center"><%= i %></td>
+								<td><%= project.project_name %></td>
+								<!-- <td><%# project.fullname %></td> -->
+								<td><%= project.project_status %></td>
+								<td><%= project.project_lang %></td>
+								<td><%= project.start_datetime %></td>
+								<td><%= project.end_datetime %></td>
+								<td class="text-center"><%= link_to '<i class="fa fa-info-circle"></i>'.html_safe, project_path(project.id), :class => "btn btn-sm btn-info" %></td>
+								<td class="text-center"><%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_project_path(project.id), :class => "btn btn-sm btn-primary" %></td>
+								<td class="text-center"><%= link_to '<i class="fa fa-trash"></i>'.html_safe, project_path(project.id), method: :delete, :data => { confirm: "Are you sure?" }, :class => "btn btn-sm btn-danger" %></td>
+							</tr>
+							<% i += 1 %>
+						<% end %>
+					<% end %>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pagination -->
+		<%= will_paginate @projects, renderer: BootstrapPagination::Rails %>
+	</div>
+</div>

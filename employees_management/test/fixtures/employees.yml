@@ -1,0 +1,51 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  username: MyString
+  fullname: MyString
+  email_company: MyString
+  email_personal: MyString
+  tel: MyString
+  gender: 1
+  birthday: 2018-04-11
+  department: MyString
+  position: MyString
+  skill: MyString
+  literacy: MyString
+  contract_type: MyString
+  status: MyString
+  address: MyString
+  bank_account: MyString
+  id_number: MyString
+  descriptrion: MyString
+  join_datetime: 2018-04-11
+  exit_datetime: 2018-04-11
+  leavedays_have: 1.5
+  leavedays_took: 1.5
+  leavedays_note: MyString
+  user_type: MyString
+
+two:
+  username: MyString
+  fullname: MyString
+  email_company: MyString
+  email_personal: MyString
+  tel: MyString
+  gender: 1
+  birthday: 2018-04-11
+  department: MyString
+  position: MyString
+  skill: MyString
+  literacy: MyString
+  contract_type: MyString
+  status: MyString
+  address: MyString
+  bank_account: MyString
+  id_number: MyString
+  descriptrion: MyString
+  join_datetime: 2018-04-11
+  exit_datetime: 2018-04-11
+  leavedays_have: 1.5
+  leavedays_took: 1.5
+  leavedays_note: MyString
+  user_type: MyString

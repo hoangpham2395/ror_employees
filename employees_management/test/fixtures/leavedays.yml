@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  employee: one
+  leave_datetime: 2018-04-12
+  leave_hour: 1.5
+  leave_reason: MyString
+  del_flag: 1
+
+two:
+  employee: two
+  leave_datetime: 2018-04-12
+  leave_hour: 1.5
+  leave_reason: MyString
+  del_flag: 1

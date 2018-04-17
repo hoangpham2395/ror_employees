@@ -1,0 +1,110 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-user"></i> Employees manage</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;"><%= @employee.fullname %></span></li>
+</ol>
+<div class="panel panel-info">
+	<div class="panel-heading">Information</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-md-4 text-center">
+				<!-- Khi chưa có ảnh thì lấy mặc định ảnh missing.png trong public/images/original -->
+				<%= image_tag(@employee.avatar.url(:medium), :class => "img-thumbnail", size: "200x200", alt: "Avatar") %>
+			</div>
+			<div class="col-md-8">
+				<%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_employee_path(@employee), :class => "btn btn-sm btn-primary", 'data-toggle' => 'tooltip', :title => "Edit" %>
+				<%= link_to '<i class="fa fa-trash"></i>'.html_safe, employee_path(@employee), :class => "btn btn-sm btn-danger", method: :delete, :data => {:confirm => "Are you sure?"}, 'data-toggle' => 'tooltip', :title => "Delete" %>
+				
+				<table class="table table-bordered table-hover" style="margin-top: 10px;">
+					<thead style="background: #53585a; color: #fff;">
+						<th width="30%"></th>
+						<th width="70%" class="text-center">Information</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td>Username</td>
+							<td><b><%= @employee.username %></b></td>
+						</tr>
+						<tr>
+							<td>Fullname</td>
+							<td><b><%= @employee.fullname %></b></td>
+						</tr>
+						<tr>
+							<td>Email company</td>
+							<td><b><%= @employee.email_company %></b></td>
+						</tr>
+						<tr>
+							<td>Email personal</td>
+							<td><b><%= @employee.email_personal %></b></td>
+						</tr>
+						<tr>
+							<td>Telephone number</td>
+							<td><b><%= @employee.tel %></b></td>
+						</tr>
+						<tr>
+							<td>Gender</td>
+							<td><b><%= @employee.gender == 1 ? "Male" : "Female" %></b></td>
+						</tr>
+						<tr>
+							<td>Birthday</td>
+							<td><b><%= @employee.birthday %></b></td>
+						</tr>
+						<tr>
+							<td>Department</td>
+							<td><b><%= @employee.department %></b></td>
+						</tr>
+						<tr>
+							<td>Position</td>
+							<td><b><%= @employee.position %></b></td>
+						</tr>
+						<tr>
+							<td>Employee type</td>
+							<td><b><%= @employee.user_type %></b></td>
+						</tr>
+						<tr>
+							<td>Skill</td>
+							<td><b><%= @employee.skill %></b></td>
+						</tr>
+						<tr>
+							<td>Literacy</td>
+							<td><b><%= @employee.literacy %></b></td>
+						</tr>
+						<tr>
+							<td>Contract type</td>
+							<td><b><%= @employee.contract_type %></b></td>
+						</tr>
+						<tr>
+							<td>Status</td>
+							<td><b><%= @employee.status %></b></td>
+						</tr>
+						<tr>
+							<td>Address</td>
+							<td><b><%= @employee.address %></b></td>
+						</tr>
+						<tr>
+							<td>Bank account</td>
+							<td><b><%= @employee.bank_account %></b></td>
+						</tr>
+						<tr>
+							<td>ID number</td>
+							<td><b><%= @employee.id_number %></b></td>
+						</tr>
+						<tr>
+							<td>Join datetime</td>
+							<td><b><%= @employee.join_datetime %></b></td>
+						</tr>
+						<tr>
+							<td>End datetime</td>
+							<td><b><%= @employee.exit_datetime %></b></td>
+						</tr>
+						<tr>
+							<td>Description</td>
+							<td><b><%= @employee.description %></b></td>
+						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>

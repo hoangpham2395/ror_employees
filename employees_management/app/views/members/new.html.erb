@@ -1,0 +1,59 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-users"></i> Members of project</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">Edit member of project</span></li>
+</ol>
+<div class="panel panel-info">
+	<div class="panel-heading">Edit member of project</div>
+	<div class="panel-body">
+		<%= form_for :member, url: members_path do |f| %>
+			<!-- Display errors -->
+			<% if @member.errors.any? %>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="alert alert-danger">
+							<% @member.errors.full_messages.each do |msg| %>
+									&#9679; <%= msg %> <br>
+							<% end %>
+						</div>
+					</div>
+				</div>
+			<% end %>
+
+			<div class="row">
+				<div class="form-group col-md-12">
+					<%= f.label :project_id, 'Project: <span style="color:red;"><b>[<i class="fa fa-asterisk"></i>]</b></span>'.html_safe %>
+					<%= f.select :project_id, Project.where(del_flag: 0).collect { |p| [p.project_name, p.id] }, { include_blank: '--- Select project --- ' }, :class => 'form-control' %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= f.label :employee_id, 'Member: <span style="color:red;"><b>[<i class="fa fa-asterisk"></i>]</b></span>'.html_safe %>
+					<%= f.select :employee_id, Employee.where(del_flag: 0).collect { |e| [e.fullname, e.id] }, { include_blank: '--- Select member ---' }, :class => 'form-control' %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= f.label :join_status, 'Status: <span style="color:red;"><b>[<i class="fa fa-asterisk"></i>]</b></span>'.html_safe %>
+					<%= f.select :join_status, [['--- Select status ---', ''], 'Joining', 'Exited'], {}, :class => 'form-control' %>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="form-group col-md-12">
+					<%= f.label :user_type, 'Level: <span style="color:red;"><b>[<i class="fa fa-asterisk"></i>]</b></span>'.html_safe %>
+					<%= f.select :user_type, [['--- Select user type ---', ''], ['Leader', 0], ['Member', 1]], {}, :class => 'form-control' %>
+				</div>
+			</div>
+
+			<%= f.hidden_field :del_flag, :value => '0' %>
+
+			<div class="row">
+				<div class="form-group text-center">
+					<%= button_tag "Reset", type: 'reset', id: 'reset_member', name: 'reset', class: 'btn btn-primary' %>
+					<%= f.submit 'Save', class: 'btn btn-danger' %>
+				</div>
+			</div>
+
+		<% end %>
+	</div>
+</div>

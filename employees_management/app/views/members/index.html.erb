@@ -1,0 +1,90 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-users"></i> Members of project</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">List of members</span></li>
+</ol>
+
+<!-- Display notification -->
+<% flash.each do |type, message| %>
+	<%= content_tag :div, class: "alert alert-#{type} alert-dismissible", role: "alert" do %>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<%= message %>
+	<% end %>
+<% end %>
+
+<div class="panel panel-info">
+	<div class="panel-heading">List of members</div>
+	<div class="panel-body">
+		<%= link_to '<i class="fa fa-refresh"></i> Reload'.html_safe, members_path, :class => "btn btn-default" %>
+		<div class="table-responsive">			
+			<table class="table table-bordered table-hover" style="margin-top: 15px; font-size: 11px;">
+				<thead style="background: #53585a; color: #fff;">
+					<th class="text-center">No.</th>
+					<th>Project</th>
+					<th>Leader</th>
+					<th>Members</th>
+					<th>Status</th>
+					<th class="text-center">Detail</th>
+					<th class="text-center">Edit</th>
+				</thead>
+				<tbody>
+
+					<%
+					list = {}
+
+					@projects.each do |p|
+						id = p.id
+						project_name = p.project_name
+						project_status = p.project_status
+						list[id] = {'id' => id, 'project_name' => project_name, 'project_status' => project_status, 'member' => {}}
+					end 
+
+					maxMember = 1
+
+					@members.each do |m|
+						memberName = m.fullname
+						memberStatus = m.join_status
+						memberType = m.user_type.to_i
+						id = m.project_id
+						memberId = m.employee_id
+						if list.has_key?(id)
+							if memberType == 0
+								list[id]['leader'] = memberName
+							else
+								maxMember = (maxMember < memberId) ? memberId : maxMember
+								list[id]['member'].merge!({memberId => memberName+' - '+memberStatus})
+							end
+						end
+					end
+
+
+					%>
+
+					<% if list.nil? %>
+						<td colspan="5" class="text-center"><span style="color: red;"><i class="fa fa-exclamation-triangle"></i> Not data</span></td>
+					<% else 
+						no = 1
+						list.each_value do |member| %>
+							<tr>
+								<td class="text-center"><%= no %></td>
+								<td><%= member['project_name'] %></td>
+								<td><%= member['leader'] %></td>
+								<td>
+									<% for i in 1..maxMember
+										if member['member'].has_key?(i) %>
+												&#9679; <%= member['member'][i] %> <br>
+										<% end 
+									end %>		
+								</td>
+								<td><%= member['project_status'] %></td>
+								<td class="text-center"><%= link_to '<i class="fa fa-info-circle"></i>'.html_safe, project_path(member['id']), :class => 'btn btn-sm btn-success' %></td>
+								<td class="text-center"><%= link_to '<i class="fa fa-pencil"></i>'.html_safe, edit_member_path(member['id']), :class => 'btn btn-sm btn-primary' %></td>
+							</tr>
+						<% no += 1
+						end
+					end %>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

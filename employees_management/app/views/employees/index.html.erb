@@ -1,0 +1,137 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-user"></i> Employees manage</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">List of employees</span></li>
+</ol>
+
+<!-- Display notification -->
+<% flash.each do |type, message| %>
+	<%= content_tag :div, class: "alert alert-#{type} alert-dismissible", role: "alert" do %>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<%= message %>
+	<% end %>
+<% end %>
+
+<div class="panel panel-info">
+	<div class="panel-heading">Search employee</div>
+	<div class="panel-body">
+		<%= form_tag(employees_path, method: :get) do %>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= label_tag :fullname, "Fullname:" %>
+					<%= text_field_tag :fullname, params[:fullname], class: "form-control", placeholder: "Fullname" %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= label_tag :email_company, "Email company:" %>
+					<%= email_field_tag :email_company, params[:email_company], class: "form-control", placeholder: "Email company" %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= label_tag :birthday, "Birthday:" %>
+					<%= date_field_tag :birthday, params[:birthday], class: "form-control", placeholder: "Birthday" %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= label_tag :gender, "Gender:" %> <br>
+					<%= radio_button_tag :gender, "1" %> Male
+					<%= radio_button_tag :gender, "2" %> Female
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= label_tag :tel, "Telephone number:" %>
+					<%= telephone_field_tag :tel, params[:tel], class: "form-control", placeholder: "Tel" %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= label_tag :department, "Department:" %>
+					<%= select_tag :department, options_for_select([['--- Select department ---', ''], 'App', 'Web', 'Difference']), {:class => "form-control"} %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= label_tag :position, "Position:" %>
+					<%= select_tag :position, options_for_select([['--- Select position ---', ''], 'Director', 'Employee', 'Tester', 'Leader']), {:class => 'form-control'} %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= label_tag :user_type, "Employee type:" %>
+					<%= select_tag :user_type, options_for_select([['--- Select employee type ---', ''], 'Offical', 'Internship', 'Probationary', 'Contract', 'Difference']), {:class => "form-control"} %>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group col-md-6">
+					<%= label_tag :status, "Status:" %>
+					<%= select_tag :status, options_for_select([['--- Select status ---', ''], 'Joining', 'Exited', 'Absent']), {:class => "form-control"} %>
+				</div>
+				<div class="form-group col-md-6">
+					<%= label_tag :join_datetime, "Join datetime:" %>
+					<%= date_field_tag :join_datetime, params[:join_datetime], :class => "form-control", :placeholder => "Join datetime" %>
+				</div>
+			</div> 
+			<div class="row">
+				<div class="form-group text-center">
+					<%= submit_tag('Reset', {:name => 'reset', :id => 'reset_button', :type => 'reset', :class => 'btn btn-primary'}) %>
+					<%= submit_tag 'Search', class: 'btn btn-danger' %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading">List of employees</div>
+	<div class="panel-body">
+		<%= link_to '<i class="fa fa-refresh"></i> Reload'.html_safe, employees_path, :class => "btn btn-default" %>
+		<div class="table-responsive">			
+			<table class="table table-bordered table-hover" style="margin-top: 15px; font-size: 11px;">
+				<thead style="background: #53585a; color: #fff;">
+					<th>No.</th>
+					<th>Username</th>
+					<th width="15%">Fullname</th>
+					<th>Email company</th>
+					<th>Telephone</th>
+					<th>Gender</th>
+					<th>Birthday</th>
+					<th>Department</th>
+					<th>Position</th>
+					<th>Status</th>
+					<th>Join datetime</th>
+					<th>Detail</th>
+					<th>Delete</th>
+				</thead>
+				<tbody>
+
+					<% if @employees.empty? %>
+						<tr>
+							<td colspan="13" class="text-center" style="color:red;"><i class="fa fa-exclamation-triangle"></i> Not data</td>
+						</tr>
+					<% else %>
+						<!-- Loop Each -->
+						<% i = 1 %>
+						<% @employees.each do |employee| %>
+							<tr>
+								<td class="text-center"><%= i %></td>
+								<td><%= employee.username %></td>
+								<td><%= employee.fullname %></td>
+								<td><%= employee.email_company %></td>
+								<td><%= employee.tel %></td>
+								<td><%= employee.gender == 1 ? 'Male' : 'Female' %></td>
+								<td><%= employee.birthday %></td>
+								<td><%= employee.department %></td>
+								<td><%= employee.position %></td>
+								<td><%= employee.status %></td>
+								<td><%= employee.join_datetime %></td>
+								<td><%= link_to '<i class="fa fa-info-circle"></i>'.html_safe, employee_path(employee), :class => "btn btn-sm btn-primary" %></td>
+								<td><%= link_to '<i class="fa fa-trash"></i>'.html_safe, employee_path(employee), :class => "btn btn-sm btn-danger", method: :delete, :data => {:confirm => "Are you sure?"} %></td>
+							</tr>
+							<% i += 1 %>
+						<% end %>
+					<% end %>
+
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pagination -->
+		<%= will_paginate @users, renderer: BootstrapPagination::Rails %>
+	</div>
+</div>	

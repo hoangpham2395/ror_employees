@@ -1,0 +1,191 @@
+<ol class="breadcrumb">
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-home"></i> Home</a></li>
+	<li class="breadcrumb-item"><a href="#"><i class="fa fa-user"></i> Leave days manage</a></li>
+	<li class="breadcrumb-item active"><span style="color: red;">Monthly manage</span></li>
+</ol>
+
+<!-- Display notification -->
+<% flash.each do |type, message| %>
+	<%= content_tag :div, class: "alert alert-#{type} alert-dismissible", role: "alert" do %>
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<%= message %>
+	<% end %>
+<% end %>
+
+<div class="panel panel-info">
+	<div class="panel-heading">Select time</div>
+	<div class="panel-body">
+		<%= form_tag leavedays_path, method: :get do %>
+			<div class="row">
+				<div class="form-group col-md-3">
+					<%= label_tag :year, "Select year:" %>
+					<%= select_tag :year, options_for_select(['2017', '2018', '2019', '2020', '2021', '2022'], @year), {:class => "form-control"} %>
+				</div>
+				<div class="form-group col-md-3">
+					<%= label_tag :month, "Select month:" %>
+					<%= select_tag :month, options_for_select([['January', '1'], ['February', '2'], ['March', '3'], ['April', '4'], ['May', '5'], ['June', '6'], ['July', '7'], ['August', '8'], ['September', '9'], ['October', '10'], ['November', '11'], ['December', '12']], [Date::MONTHNAMES[@month], @month]), {:class => "form-control"} %>
+				</div>
+				<div class="form-group col-md-6" style="padding: 25px;">
+					<%= button_tag 'Show', class: 'btn btn-danger', :name => 'show', :value => 'show_leavedays' %>
+					<%= link_to 'Current', leavedays_path, :class => 'btn btn-default' %>
+				</div>
+			</div>
+		<% end %>
+	</div>
+</div>
+
+<div class="panel panel-info">
+	<div class="panel-heading">Monthly manage</div>
+	<div class="panel-body">
+		<%= button_tag 'Add new leave day', :class => 'btn btn-danger', :type => 'button', 'data-toggle' => 'modal', 'data-target' => "#modalAddLD" %>
+
+		<!-- Modal add leave days => update -->
+		<div id="modalAddLD" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<%= form_for :leaveday, url: leavedays_path do |f| %>
+			    	<div class="modal-content">
+			      		<div class="modal-header" style="color: #fff; background-color: #337ab7;">
+			        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+			        		<h4 class="modal-title">Add new leave day</h4>
+			      		</div>
+				      	<div class="modal-body">
+				      		<div class="row">
+				      			<div class="form-group col-md-12">
+				      				<%= f.label :employee_id, "Fullname:" %>
+				      				<%= f.select :employee_id, Employee.all.collect { |e| [e.fullname, e.id] }, {}, :class => 'form-control' %>
+				      			</div>
+				      		</div>
+				        	<div class="row">
+				      			<div class="form-group col-md-6">
+				      				<%= f.label :leave_datetime, "Datetime:" %>
+				      				<%= f.date_field :leave_datetime, :class => 'form-control' %>
+				      			</div>
+				      			<div class="form-group col-md-6">
+				      				<%= f.label :leave_hour, "Hours:" %>
+				      				<%= f.text_field :leave_hour, :class => 'form-control', :placeholder => 'Leave hour' %>
+				      			</div>
+				      		</div>
+				      		<div class="row">
+				      			<div class="form-group col-md-12">
+				      				<%= f.label :leave_reason, "Reason:" %>
+				      				<%= f.text_area :leave_reason, :rows => 5, :class => 'form-control', :placeholder => 'Leave reason' %>
+				      			</div>
+				      		</div>
+				      		<%= f.hidden_field :del_flag,:value => "0" %>
+				      	</div>
+				      	<div class="modal-footer">
+				      		<%= f.submit 'Save', class: 'btn btn-danger' %>
+				      		<%= button_tag 'Close', {:type => 'button', :class => 'btn btn-default', 'data-dismiss' => 'modal'} %>
+				      	</div>
+			    	</div>
+	    		<% end %>
+		  	</div>
+		</div>
+
+		<div class="table-responsive">			
+			<table class="table table-bordered table-hover" style="margin-top: 15px; font-size: 12px;">
+				<thead style="background: #53585a; color: #fff;">
+					<th>No.</th>
+					<th width="20%">Fullname</th>
+					<% for i in 1..Time.new(@year, @month, 1).end_of_month.day do %>
+						<th class="text-center"><%= "#{Date.new(@year, @month, i).strftime("%a")} #{i}/#{@month}" %></th>
+					<% end %>
+				</thead>
+				<tbody>
+					<% if @employees.empty? %>
+						<tr>
+							<td colspan="<%= Time.new(@year, @month, 1).end_of_month.day + 2 %>" class="text-center"><span style="color: red;"><i class="fa fa-exclamation-triangle"></i> Not data</span></td>
+						</tr>
+					<% else 
+
+						# Khai báo Hash, 1 dạng array có key và value
+						list = {}
+
+						if !@leavedays.nil?	
+							@leavedays.each do |l|
+								id = l.id
+								fullname = l.fullname
+								date = Date.parse(l.leave_datetime).strftime('%d').to_i
+								list[id] = {"id" => id, "fullname" => fullname, 'hour' => {}}
+							end
+
+							@leavedays.each do |l|
+								id = l.id
+								date = Date.parse(l.leave_datetime).strftime('%d').to_i
+								hour = l.leave_hour.to_f
+								reason = l.leave_reason
+								if list.has_key?(id)
+									list[id]['hour'].merge!({date => hour})
+								end
+							end
+						end
+
+						no = 1
+						@employees.each do |e|
+							id = e.id
+							%>
+							<tr>
+								<td><%= no %></td>	
+								<td><%= e.fullname %></td>
+								<% for i in 1..Time.new(@year, @month, 1).end_of_month.day do %>
+									<td>
+										<% if list.has_key?(id) && list[id]['hour'].has_key?(i) %>
+											<%= link_to list[id]['hour'][i], '#', 'data-toggle' => 'modal', 'data-target' => 'data-target' => "#modalLD-#{id}-#{i}" %>
+											<!-- Modal add leave days => update -->
+											<div id="modalLD-<%= id %>-<%= i %>" class="modal fade" role="dialog">
+												<div class="modal-dialog">
+													<%= form_for @leaveday do |f| %>
+												    	<div class="modal-content">
+												      		<div class="modal-header" style="color: #fff; background-color: #337ab7;">
+												        		<button type="button" class="close" data-dismiss="modal">&times;</button>
+												        		<h4 class="modal-title">Edit leave day</h4>
+												      		</div>
+													      	<div class="modal-body">
+													      		<div class="row">
+													      			<div class="form-group col-md-12">
+													      				<%= f.label :employee_id, "Fullname:" %>
+													      				<%= f.select :employee_id, Employee.all.collect { |e| [e.fullname, e.id] }, {}, :class => 'form-control' %>
+													      			</div>
+													      		</div>
+													        	<div class="row">
+													      			<div class="form-group col-md-6">
+													      				<%= f.label :leave_datetime, "Datetime:" %>
+													      				<%= f.date_field :leave_datetime, :class => 'form-control' %>
+													      			</div>
+													      			<div class="form-group col-md-6">
+													      				<%= f.label :leave_hour, "Hours:" %>
+													      				<%= f.text_field :leave_hour, :class => 'form-control', :placeholder => 'Leave hour' %>
+													      			</div>
+													      		</div>
+													      		<div class="row">
+													      			<div class="form-group col-md-12">
+													      				<%= f.label :leave_reason, "Reason:" %>
+													      				<%= f.text_area :leave_reason, :rows => 5, :class => 'form-control', :placeholder => 'Leave reason' %>
+													      			</div>
+													      		</div>
+													      		<%= f.hidden_field :del_flag,:value => "0" %>
+													      	</div>
+													      	<div class="modal-footer">
+													      		<%= f.submit 'Save', class: 'btn btn-danger' %>
+													      		<%= button_tag 'Close', {:type => 'button', :class => 'btn btn-default', 'data-dismiss' => 'modal'} %>
+													      	</div>
+												    	</div>
+										    		<% end %>
+											  	</div>
+											</div>
+										<% end %>
+									</td>
+								<% end %>
+							</tr>
+							<%
+							no += 1
+						end
+					end %>
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pagination -->
+		<%= will_paginate @employees, renderer: BootstrapPagination::Rails %>
+	</div>
+</div>

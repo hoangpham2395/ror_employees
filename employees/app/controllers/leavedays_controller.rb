@@ -1,2 +1,0 @@
-class LeavedaysController < ApplicationController
-end
